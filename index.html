@@ -143,10 +143,10 @@
   /* Watermark */
   .login-watermark {
     position: absolute;
-    bottom: -30px;
-    left: -20px;
+    bottom: -10px;
+    left: 20px;
     font-family: var(--font-display);
-    font-size: clamp(120px, 18vw, 220px);
+    font-size: clamp(80px, 10vw, 130px);
     font-weight: 900;
     color: rgba(255,255,255,0.04);
     letter-spacing: -4px;
@@ -1669,10 +1669,10 @@
     </div>
 
     <div class="lf-group">
-      <label class="lf-label">Email address</label>
+      <label class="lf-label">Username</label>
       <div class="lf-input-wrap">
-        <svg class="lf-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-        <input type="email" class="lf-input" id="login-email" placeholder="you@example.com" value="lotfi@mathpp.ac">
+        <svg class="lf-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" class="lf-input" id="login-email" placeholder="Enter your username" value="">
       </div>
     </div>
 
@@ -1680,7 +1680,7 @@
       <label class="lf-label">Password</label>
       <div class="lf-input-wrap">
         <svg class="lf-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        <input type="password" class="lf-input" id="login-pass" placeholder="••••••••" value="••••••••">
+        <input type="password" class="lf-input" id="login-pass" placeholder="••••••••" value="05052025">
       </div>
     </div>
 
@@ -1691,7 +1691,7 @@
 
     <p class="lf-hint">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;vertical-align:-2px;margin-right:4px"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      Demo — click the button to sign in
+      Enter your credentials to sign in
     </p>
 
     <div class="lf-footer">
@@ -2569,15 +2569,34 @@ function submitUpload(type) {
 
 // ─── AUTH ───
 function doLogin() {
-  const email = document.getElementById('login-email').value;
-  if (email.includes('admin')) {
-    showPage('page-admin');
-    renderDashboard();
-  } else {
+  const username = document.getElementById('login-email').value.trim();
+  const password = document.getElementById('login-pass').value.trim();
+
+  // Obfuscated credential check
+  const _k = 'mathpp2025academy';
+  const _u = 'IQ4ADhlefURTXA==';
+  const _p = 'XVREXUJAAAU=';
+
+  function _decode(enc, key) {
+    const bytes = atob(enc);
+    let result = '';
+    for (let i = 0; i < bytes.length; i++) {
+      result += String.fromCharCode(bytes.charCodeAt(i) ^ key.charCodeAt(i % key.length));
+    }
+    return result;
+  }
+
+  if (username === _decode(_u, _k) && password === _decode(_p, _k)) {
     showPage('page-dashboard');
     renderDashboard();
+  } else {
+    const card = document.querySelector('.login-card');
+    card.style.boxShadow = '0 0 0 4px rgba(204,28,28,0.35), 0 32px 80px rgba(0,0,0,0.45)';
+    setTimeout(function() { card.style.boxShadow = ''; }, 1200);
+    showToast('❌ Invalid username or password');
   }
 }
+
 function doLogout() {
   showPage('page-login');
 }
