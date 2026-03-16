@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Math++ Academy</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC1C1C;
+    --red-dark: #A01515;
+    --red-deep: #7A0F0F;
+    --red-light: #F7E5E5;
+    --red-mid: #E85555;
+    --white: #FFFFFF;
+    --off-white: #FDF8F8;
+    --gray-100: #F5F0F0;
+    --gray-200: #E8E0E0;
+    --gray-500: #9E8E8E;
+    --gray-700: #4A3A3A;
+    --gray-900: #1A1010;
+    --font-display: 'Playfair Display', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+    --shadow-sm: 0 2px 8px rgba(180,30,30,0.08);
+    --shadow-md: 0 6px 24px rgba(180,30,30,0.12);
+    --shadow-lg: 0 16px 48px rgba(180,30,30,0.16);
+    --radius: 12px;
+    --radius-lg: 20px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--off-white);
+    color: var(--gray-900);
+    min-height: 100vh;
+  }
+
+  /* ─── PAGES ─── */
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: flex; flex-direction: column; }
+
+  /* ─── NAV ─── */
+  nav {
+    background: var(--white);
+    border-bottom: 1.5px solid var(--gray-200);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 68px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .logo-mark {
+    width: 40px;
+    height: 40px;
+    background: var(--red);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    flex-shrink: 0;
+  }
+  .logo-text {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.1;
+  }
+  .logo-text span { color: var(--red); }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .nav-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--red-light);
+    border: 2px solid var(--red);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--red);
+  }
+  .nav-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-700);
+  }
+  .btn-logout {
+    background: none;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-family: var(--font-body);
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-logout:hover {
+    border-color: var(--red);
+    color: var(--red);
+  }
+
+  /* ─── LOGIN PAGE ─── */
+  #page-login {
+    background: linear-gradient(135deg, var(--gray-900) 0%, #3A1010 100%);
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #page-login::before {
+    content: '';
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(204,28,28,0.15) 0%, transparent 70%);
+    top: -150px;
+    right: -150px;
+    pointer-events: none;
+  }
+  #page-login::after {
+    content: 'Math++';
+    position: absolute;
+    bottom: -30px;
+    left: -20px;
+    font-family: var(--font-display);
+    font-size: 160px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.03);
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .login-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: 3rem;
+    width: 420px;
+    max-width: 90vw;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    z-index: 1;
+  }
+  .login-logo {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  .login-logo-mark {
+    width: 64px;
+    height: 64px;
+    background: var(--red);
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 900;
+    margin-bottom: 12px;
+  }
+  .login-title {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--gray-900);
+    text-align: center;
+    margin-bottom: 4px;
+  }
+  .login-title span { color: var(--red); }
+  .login-sub {
+    text-align: center;
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 2rem;
+  }
+  .form-group {
+    margin-bottom: 1.2rem;
+  }
+  .form-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
+    margin-bottom: 6px;
+  }
+  .form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: var(--gray-900);
+    background: var(--white);
+    transition: border-color 0.2s;
+    outline: none;
+  }
+  .form-input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(204,28,28,0.1);
+  }
+  .btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 0.5rem;
+  }
+  .btn-primary:hover {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(204,28,28,0.3);
+  }
+  .btn-primary:active {
+    transform: translateY(0);
+  }
+  .login-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--gray-500);
+    margin-top: 1.5rem;
+  }
+
+  /* ─── DASHBOARD ─── */
+  .dash-container {
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    flex: 1;
+  }
+  .dash-header {
+    margin-bottom: 2rem;
+  }
+  .dash-greeting {
+    font-size: 14px;
+    color: var(--gray-500);
+    margin-bottom: 4px;
+  }
+  .dash-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+  .dash-title span { color: var(--red); }
+
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .stat-card {
+    background: var(--white);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    border: 1.5px solid var(--gray-200);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  .stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: var(--red-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .stat-icon svg { width: 22px; height: 22px; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1;
+    margin-bottom: 2px;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--gray-500);
+    font-weight: 500;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gray-900);
+  }
+  .section-title-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .title-accent {
+    width: 4px;
+    height: 22px;
+    background: var(--red);
+    border-radius: 4px;
+  }
+  .btn-see-all {
+    font-size: 13px;
+    color: var(--red);
+    font-weight: 600;
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-family: var(--font-body);
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: background 0.2s;
+  }
+  .btn-see-all:hover { background: var(--red-light); }
+
+  /* ─── COURSE CARDS ─── */
+  .courses-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .course-card {
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    border: 1.5px solid var(--gray-200);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.25s;
+    box-shadow: var(--shadow-sm);
+  }
+  .course-card:hover {
+    border-color: var(--red-mid);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-3px);
+  }
+  .course-thumb {
+    height: 120px;
+    background: linear-gradient(135deg, var(--red-deep), var(--red));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-thumb::after {
+    content: attr(data-num);
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-family: var(--font-display);
+    font-size: 80px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.1);
+    line-height: 1;
+  }
+  .course-thumb svg { width: 40px; height: 40px; opacity: 0.9; }
+  .course-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 20px;
+    backdrop-filter: blur(4px);
+  }
+  .course-body {
+    padding: 1.1rem 1.25rem;
+  }
+  .course-tag {
+    display: inline-block;
+    background: var(--red-light);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .course-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+  .course-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .course-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .progress-bar-wrap {
+    margin-top: 12px;
+    height: 4px;
+    background: var(--gray-200);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: var(--red);
+    border-radius: 4px;
+    transition: width 0.5s;
+  }
+
+  /* ─── RECENT MATERIALS ─── */
+  .materials-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 2.5rem;
+  }
+  .material-row {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .material-row:hover {
+    border-color: var(--red-mid);
+    box-shadow: var(--shadow-sm);
+  }
+  .material-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .material-icon.pdf { background: #FFF0F0; }
+  .material-icon.video { background: #FFF0F0; }
+  .material-icon svg { width: 20px; height: 20px; }
+  .material-info { flex: 1; min-width: 0; }
+  .material-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .material-sub {
+    font-size: 12px;
+    color: var(--gray-500);
+  }
+  .material-tag {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .material-tag.pdf {
+    background: var(--red-light);
+    color: var(--red);
+  }
+  .material-tag.video {
+    background: #FFF0F0;
+    color: #C03030;
+  }
+  .material-arrow {
+    color: var(--gray-500);
+    font-size: 18px;
+  }
+
+  /* ─── COURSE DETAIL PAGE ─── */
+  .course-detail-hero {
+    background: linear-gradient(135deg, var(--gray-900), var(--red-deep));
+    color: white;
+    padding: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .course-detail-hero::after {
+    content: attr(data-title);
+    position: absolute;
+    right: -20px;
+    bottom: -30px;
+    font-family: var(--font-display);
+    font-size: 100px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.05);
+    white-space: nowrap;
+  }
+  .hero-back {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    cursor: pointer;
+    margin-bottom: 1.5rem;
+    width: fit-content;
+    transition: color 0.2s;
+  }
+  .hero-back:hover { color: white; }
+  .hero-course-tag {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+  }
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    position: relative;
+    z-index: 1;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    position: relative;
+    z-index: 1;
+  }
+  .hero-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tabs {
+    background: var(--white);
+    border-bottom: 1.5px solid var(--gray-200);
+    padding: 0 2.5rem;
+    display: flex;
+    gap: 0;
+  }
+  .tab-btn {
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    color: var(--gray-500);
+    background: none;
+    border: none;
+    border-bottom: 2.5px solid transparent;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: -1.5px;
+  }
+  .tab-btn.active {
+    color: var(--red);
+    border-bottom-color: var(--red);
+  }
+  .tab-btn:hover:not(.active) { color: var(--gray-700); }
+
+  .tab-content { display: none; padding: 2rem 2.5rem; }
+  .tab-content.active { display: block; }
+
+  /* Materials in detail */
+  .detail-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+  }
+  .detail-section-title:first-child { margin-top: 0; }
+
+  /* video player */
+  .video-player {
+    background: var(--gray-900);
+    border-radius: var(--radius);
+    aspect-ratio: 16/9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .video-player-inner {
+    text-align: center;
+    color: white;
+  }
+  .play-btn {
+    width: 64px;
+    height: 64px;
+    background: rgba(204,28,28,0.9);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .video-player:hover .play-btn {
+    transform: scale(1.1);
+    background: var(--red);
+  }
+  .play-btn svg { width: 28px; height: 28px; margin-left: 4px; }
+  .video-title-overlay {
+    font-size: 14px;
+    color: rgba(255,255,255,0.8);
+  }
+
+  /* Admin page */
+  .admin-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+  .admin-card {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+  }
+  .admin-card-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .admin-card-icon {
+    width: 30px;
+    height: 30px;
+    background: var(--red-light);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .admin-card-icon svg { width: 16px; height: 16px; }
+  .upload-area {
+    border: 2px dashed var(--gray-200);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .upload-area:hover {
+    border-color: var(--red-mid);
+    background: var(--red-light);
+  }
+  .upload-icon {
+    width: 44px;
+    height: 44px;
+    background: var(--red-light);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+  }
+  .upload-icon svg { width: 22px; height: 22px; }
+  .upload-text { font-size: 14px; font-weight: 500; color: var(--gray-700); margin-bottom: 4px; }
+  .upload-hint { font-size: 12px; color: var(--gray-500); }
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: var(--red);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: var(--font-body);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 1rem;
+  }
+  .btn-secondary:hover {
+    background: var(--red-dark);
+    transform: translateY(-1px);
+  }
+
+  /* Sidebar layout for course detail */
+  .detail-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+    max-width: 1160px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+    flex: 1;
+  }
+  .detail-sidebar {
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    height: fit-content;
+    position: sticky;
+    top: 88px;
+  }
+  .sidebar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-700);
+    margin-bottom: 1rem;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid var(--gray-200);
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-bottom: 4px;
+  }
+  .sidebar-item:hover { background: var(--gray-100); }
+  .sidebar-item.active { background: var(--red-light); }
+  .sidebar-item-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .sidebar-item-icon.pdf { background: #FFE5E5; }
+  .sidebar-item-icon.video { background: #FFE5E5; }
+  .sidebar-item-icon svg { width: 14px; height: 14px; }
+  .sidebar-item-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-700);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .sidebar-item.active .sidebar-item-name { color: var(--red); }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .stats-row { grid-template-columns: 1fr; }
+    .admin-grid { grid-template-columns: 1fr; }
+    .detail-layout { grid-template-columns: 1fr; }
+    .detail-sidebar { position: static; }
+    nav { padding: 0 1rem; }
+    .nav-name { display: none; }
+    .dash-container { padding: 1.5rem 1rem; }
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .page.active .dash-container,
+  .page.active .login-card {
+    animation: fadeIn 0.4s ease both;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--gray-900);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: LOGIN
+═══════════════════════════════════════ -->
+<div class="page active" id="page-login">
+  <div class="login-card">
+    <div class="login-logo">
+      <img src="data:image/jpeg;base64,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" style="width:64px;height:64px;border-radius:16px;object-fit:cover;display:block;margin:0 auto 12px" alt="Math++ Academy">
+      <p style="font-family:var(--font-display);font-size:13px;color:var(--gray-500);text-align:center;margin-top:6px;letter-spacing:0.3px">Baccalaureate Mathematics</p>
+    </div>
+    <p class="login-sub">Sign in to access your courses</p>
+
+    <div class="form-group">
+      <label class="form-label">Email address</label>
+      <input type="email" class="form-input" id="login-email" placeholder="you@example.com" value="student@math.ac">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input type="password" class="form-input" id="login-pass" placeholder="••••••••" value="••••••••">
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Sign in to Academy</button>
+    <p class="login-hint">Demo: click sign in — no real auth needed</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: STUDENT DASHBOARD
+═══════════════════════════════════════ -->
+<div class="page" id="page-dashboard">
+  <nav>
+    <div class="nav-logo" onclick="showDash()">
+      <img src="data:image/jpeg;base64,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" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="Math++ Academy">
+      
+    </div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <div class="avatar" id="nav-avatar">AS</div>
+        <span class="nav-name" id="nav-name">Ahmed S.</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="dash-container">
+    <div class="dash-header">
+      <p class="dash-greeting">Welcome back,</p>
+      <h1 class="dash-title">Ahmed <span>Salah</span></h1>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2">
+            <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-num" id="stat-courses">6</div>
+          <div class="stat-label">Enrolled courses</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2">
+            <path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-num">14</div>
+          <div class="stat-label">Videos watched</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2">
+            <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+          </svg>
+        </div>
+        <div>
+          <div class="stat-num">22</div>
+          <div class="stat-label">PDFs downloaded</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COURSES -->
+    <div class="section-header">
+      <div class="section-title-line">
+        <div class="title-accent"></div>
+        <h2 class="section-title">My Courses</h2>
+      </div>
+      <button class="btn-see-all">See all →</button>
+    </div>
+    <div class="courses-grid" id="courses-grid"></div>
+
+    <!-- RECENT MATERIALS -->
+    <div class="section-header">
+      <div class="section-title-line">
+        <div class="title-accent"></div>
+        <h2 class="section-title">Recent Materials</h2>
+      </div>
+    </div>
+    <div class="materials-list" id="materials-list"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: COURSE DETAIL
+═══════════════════════════════════════ -->
+<div class="page" id="page-course">
+  <nav>
+    <div class="nav-logo" onclick="showDash()">
+      <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMDAsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wgARCABkAGQDASIAAhEBAxEB/8QAGgABAQADAQEAAAAAAAAAAAAAAAEGBwgFAv/EABkBAQEAAwEAAAAAAAAAAAAAAAABAgMEBf/aAAwDAQACEAMQAAAB6pCAAAAAAoJFgUoIlAAKIlMEw6c7YJkE2e2w3z8dmwmK/G3gy0XEFBHMPTzn9fnzE+r5o9bnf1N6XLn1LtqOjx1l28QKCEoQtQKJLKAoJKCC1CVKAAoIgUEBQgKC/wD/xAAgEAACAgIBBQEAAAAAAAAAAAAEBQMGAQIRAAcgImAw/9oACAEBAAEFAvhK7a4n8ubXFmw5eL8Tm2kQBtFatcPmz7QFRE+3ldeSReVhcGq2UWdkVg4dtCOMxXgCNrn289BPx4645+I//8QAJxEAAQMDAgUFAQAAAAAAAAAAAQIDEQAEEgWBITFBUWETFCAwQJH/2gAIAQMBAT8B+9u3ddbW6gcE896XZ3DcZIPETtSdPuVJyCOmW3KiCkwfhY6iqxQtKUzlH8E8N5pvXyHA6tuVQOvknt5o60r08Qkg4lM5eZ7bVeXPu31PxE/o/8QAIhEBAAEDAQkAAAAAAAAAAAAAAQIAA0ETBBESFCAhMEBR/9oACAECAQE/AfOzBBzRci5puwM9Ny1qI/Kdl7cI1y5vq3DTiR9j/8QAKRAAAQMEAQEHBQAAAAAAAAAAAQIDBAAREhMFMRQhQWBhcdEgQlGhsf/aAAgBAQAGPwLyI81q0Oo7wkqvkKTxTbWZviXcuhtetPbWNt7Y5imoLhF1C6nMhij3qZDkKZZisoyS8VdenzRnxmzPR4Bg3puD2CQhKmdu1YFh6H+e/wBZ5PjwozI75TiBfJJArh0ruqQtsuOn8qOVSVKjsRnw7csoYOY9SquFmy2corsdG5Vr5Kt4/qpu1oOx9IWhJ6dEfNTm/tS/3Dyn/8QAJhABAAIBAwIFBQAAAAAAAAAAAREhADFBUWGRIDBAcaFQYLHB4f/aAAgBAQABPyH6VHqjwy9IRSjSu+LYZDgGkRFxEa5JYchTx74VVOJLdXpo7mDwnEltS2N+nGCpyAA11XY/eMEbZC1udfg6+J0xbLWc21vC/Lxk668ZRTJ6UY/h8a62vQliOdjJQup/5U32YXiD11EV7YDZFy2r+HlQlYJcRqJ+yP/aAAwDAQACAAMAAAAQRgUoQ08BlwBRV8F047CB8BLFbnp8hJMMlt8NhcNJc8BdA9d88//EAB4RAAICAwEAAwAAAAAAAAAAAAERITEAEEEgMFFh/9oACAEDAQE/ED8D9HGgVtEUEXzjXc4kAoOVEpqurH4KL9YMPssiL7hwNEcOzgBj3ZgyCCkAlhXiM0BhaMhgjBWFBlYTBEASAIgQOgAyMhUljumgpvgFoWnWz4ez4Wz7/8QAIREBAQABAwMFAAAAAAAAAAAAAREAIWGBIDFBMEBRkeH/2gAIAQIBAT8Q9duo9nGU4NGc4pHynPfBEp0GwzV9s14mCuEr42D52w1qiUZNp+5qLZ7j/8QAIhABAAICAwEAAgMBAAAAAAAAAQARECExQVEgYXEwgZHR/9oACAEBAAE/EOc1K+K+WdS4sM9fTxjveDyXuXZin2B8PErcrCoGaxWXiH8P4nmHiHLFoWD06H3bLRZCV0/NFx0SIHdwE03Z1vsTjqXq+6Larm4deK3Qxm1CU9e0oFMgg7LFiALaRfIcaNG/o4aFsFcogxQMhUDqtiLQoJh2YYcs5I8pNxDQ9hrxuk3fKdAWOwWdovcJ5Y6BtVbMuaUCUkquyixadC+p+EDxkJRC6cNQ8fsIGluIekXfp/hFJdzzPeDXVSjyAgDkQ2wigHiXKPI1Al1PM9Ral6n9S53Nyq/c3Hn5YcTqXBZuVWN3lwwJWoe4rPH7+dM6xcpxz+IfXMWdT/kuD9f/2Q==" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="Math++ Academy">
+      
+    </div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <div class="avatar">AS</div>
+        <span class="nav-name">Ahmed S.</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
+
+  <div class="course-detail-hero" id="course-hero">
+    <div class="hero-back" onclick="showDash()">
+      ← Back to dashboard
+    </div>
+    <div class="hero-course-tag" id="hero-tag">Mathematics</div>
+    <h1 class="hero-title" id="hero-title">Course Title</h1>
+    <div class="hero-meta">
+      <span class="hero-meta-item">📄 <span id="hero-pdfs">0 PDFs</span></span>
+      <span class="hero-meta-item">🎬 <span id="hero-videos">0 Videos</span></span>
+      <span class="hero-meta-item">📅 <span id="hero-updated">Updated recently</span></span>
+    </div>
+  </div>
+
+  <div class="tabs" id="course-tabs">
+    <button class="tab-btn active" onclick="switchTab('videos')">Videos</button>
+    <button class="tab-btn" onclick="switchTab('pdfs')">PDF Resources</button>
+    <button class="tab-btn" onclick="switchTab('overview')">Overview</button>
+  </div>
+
+  <div style="max-width:1160px;margin:0 auto;padding:2rem 1.5rem;flex:1">
+
+    <!-- VIDEOS TAB -->
+    <div class="tab-content active" id="tab-videos">
+      <div id="video-list"></div>
+    </div>
+
+    <!-- PDFs TAB -->
+    <div class="tab-content" id="tab-pdfs">
+      <div id="pdf-list"></div>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div class="tab-content" id="tab-overview">
+      <div style="max-width:620px">
+        <h3 style="font-family:var(--font-display);font-size:22px;margin-bottom:1rem;" id="ov-title"></h3>
+        <p style="font-size:15px;color:var(--gray-700);line-height:1.8;margin-bottom:1.5rem;" id="ov-desc"></p>
+        <div style="background:var(--red-light);border-left:4px solid var(--red);border-radius:0 var(--radius) var(--radius) 0;padding:1rem 1.25rem;">
+          <p style="font-size:13px;font-weight:600;color:var(--red);margin-bottom:4px;">Instructor note</p>
+          <p style="font-size:14px;color:var(--gray-700);">Practice exercises are available in the PDF resources tab. Make sure to complete them before each session.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════
+     PAGE: ADMIN
+═══════════════════════════════════════ -->
+<div class="page" id="page-admin">
+  <nav>
+    <div class="nav-logo" onclick="showDash()">
+      <img src="data:image/jpeg;base64,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" style="width:40px;height:40px;border-radius:10px;object-fit:cover;flex-shrink:0" alt="Math++ Academy">
+      
+    </div>
+    <div class="nav-right">
+      <div class="nav-user">
+        <div class="avatar" style="background:#1A1010;border-color:#1A1010;color:white;">AD</div>
+        <span class="nav-name">Admin</span>
+      </div>
+      <button class="btn-logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </nav>
+  <div class="dash-container">
+    <div class="dash-header">
+      <p class="dash-greeting">Content management</p>
+      <h1 class="dash-title">Admin <span>Panel</span></h1>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row" style="margin-bottom:2rem">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        </div>
+        <div><div class="stat-num">32</div><div class="stat-label">Total students</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+        </div>
+        <div><div class="stat-num">6</div><div class="stat-label">Active courses</div></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        </div>
+        <div><div class="stat-num">48</div><div class="stat-label">Files uploaded</div></div>
+      </div>
+    </div>
+
+    <div class="admin-grid">
+      <!-- Upload PDF -->
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <div class="admin-card-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          </div>
+          Upload PDF Resource
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select class="form-input" id="pdf-course">
+            <option>Algebra & Functions</option>
+            <option>Calculus I</option>
+            <option>Trigonometry</option>
+            <option>Probability & Statistics</option>
+            <option>Complex Numbers</option>
+            <option>Geometry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Resource title</label>
+          <input type="text" class="form-input" placeholder="e.g. Chapter 3 — Limits exercises">
+        </div>
+        <div class="upload-area" onclick="showToast('PDF upload ready — connect your backend!')">
+          <div class="upload-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          </div>
+          <div class="upload-text">Drop PDF here or click to browse</div>
+          <div class="upload-hint">Max file size: 50MB · PDF only</div>
+        </div>
+        <button class="btn-secondary" onclick="showToast('PDF uploaded successfully!')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          Upload PDF
+        </button>
+      </div>
+
+      <!-- Upload Video -->
+      <div class="admin-card">
+        <div class="admin-card-title">
+          <div class="admin-card-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          </div>
+          Upload Video Lesson
+        </div>
+        <div class="form-group">
+          <label class="form-label">Course</label>
+          <select class="form-input">
+            <option>Algebra & Functions</option>
+            <option>Calculus I</option>
+            <option>Trigonometry</option>
+            <option>Probability & Statistics</option>
+            <option>Complex Numbers</option>
+            <option>Geometry</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Video title</label>
+          <input type="text" class="form-input" placeholder="e.g. Lesson 5 — Derivatives intro">
+        </div>
+        <div class="upload-area" onclick="showToast('Video upload ready — connect your backend!')">
+          <div class="upload-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>
+          </div>
+          <div class="upload-text">Drop video here or click to browse</div>
+          <div class="upload-hint">Supports MP4, MOV, WebM · Max 2GB</div>
+        </div>
+        <button class="btn-secondary" onclick="showToast('Video uploaded successfully!')">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+          Upload Video
+        </button>
+      </div>
+
+      <!-- Manage Courses -->
+      <div class="admin-card" style="grid-column: 1 / -1;">
+        <div class="admin-card-title">
+          <div class="admin-card-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+          </div>
+          Manage Courses
+        </div>
+        <div id="admin-courses-table"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── DATA ───
+const COURSES = [
+  {
+    id: 1, tag: "Core", name: "Algebra & Functions",
+    desc: "Master polynomial, rational, and exponential functions. Build a strong foundation for all advanced topics.",
+    pdfs: 8, videos: 12, progress: 72, num: "01",
+    materials: {
+      videos: [
+        { title: "Introduction to polynomial functions", duration: "42 min" },
+        { title: "Rational functions and asymptotes", duration: "38 min" },
+        { title: "Exponential and logarithmic functions", duration: "51 min" },
+        { title: "Function composition and inverses", duration: "44 min" },
+      ],
+      pdfs: [
+        { title: "Chapter 1 — Polynomial functions exercises", pages: "12 pages" },
+        { title: "Chapter 2 — Rational functions worksheet", pages: "8 pages" },
+        { title: "Exam practice — Algebra full test", pages: "24 pages" },
+      ]
+    }
+  },
+  {
+    id: 2, tag: "Core", name: "Calculus I",
+    desc: "Limits, derivatives and integrals explained step-by-step with worked examples and practice sheets.",
+    pdfs: 10, videos: 16, progress: 45, num: "02",
+    materials: {
+      videos: [
+        { title: "Limits — intuition and formal definition", duration: "55 min" },
+        { title: "Continuity and discontinuities", duration: "40 min" },
+        { title: "Derivative rules — power, chain, product", duration: "62 min" },
+        { title: "Applications of derivatives", duration: "48 min" },
+        { title: "Introduction to integration", duration: "50 min" },
+      ],
+      pdfs: [
+        { title: "Limits — complete worked problems", pages: "18 pages" },
+        { title: "Derivatives — 50 practice exercises", pages: "22 pages" },
+        { title: "Baccalaureate past papers — Calculus", pages: "30 pages" },
+      ]
+    }
+  },
+  {
+    id: 3, tag: "Core", name: "Trigonometry",
+    desc: "Unit circle, trigonometric identities, and solving equations. Visual approach with diagrams.",
+    pdfs: 6, videos: 9, progress: 88, num: "03",
+    materials: {
+      videos: [
+        { title: "The unit circle — angles and coordinates", duration: "38 min" },
+        { title: "Trig identities and proofs", duration: "46 min" },
+        { title: "Solving trig equations", duration: "41 min" },
+      ],
+      pdfs: [
+        { title: "Unit circle reference sheet", pages: "2 pages" },
+        { title: "Trigonometry identity proofs worksheet", pages: "14 pages" },
+        { title: "Past exam — Trigonometry section", pages: "10 pages" },
+      ]
+    }
+  },
+  {
+    id: 4, tag: "Statistics", name: "Probability & Statistics",
+    desc: "Combinatorics, probability laws, and statistical distributions. Includes real dataset exercises.",
+    pdfs: 7, videos: 11, progress: 30, num: "04",
+    materials: {
+      videos: [
+        { title: "Counting principles — permutations & combinations", duration: "44 min" },
+        { title: "Probability laws and conditional probability", duration: "52 min" },
+        { title: "Binomial and normal distributions", duration: "58 min" },
+      ],
+      pdfs: [
+        { title: "Combinatorics — worked examples", pages: "16 pages" },
+        { title: "Statistics — full baccalaureate review", pages: "28 pages" },
+      ]
+    }
+  },
+  {
+    id: 5, tag: "Advanced", name: "Complex Numbers",
+    desc: "Algebraic and geometric form, modulus, argument, and De Moivre's theorem.",
+    pdfs: 5, videos: 8, progress: 20, num: "05",
+    materials: {
+      videos: [
+        { title: "Complex numbers — forms and operations", duration: "40 min" },
+        { title: "Modulus-argument form", duration: "35 min" },
+        { title: "De Moivre's theorem", duration: "42 min" },
+      ],
+      pdfs: [
+        { title: "Complex numbers — complete notes", pages: "20 pages" },
+        { title: "Exam exercises — complex numbers", pages: "12 pages" },
+      ]
+    }
+  },
+  {
+    id: 6, tag: "Core", name: "Geometry & Vectors",
+    desc: "Analytic geometry, vectors in 2D and 3D, scalar and cross products, lines and planes.",
+    pdfs: 9, videos: 13, progress: 58, num: "06",
+    materials: {
+      videos: [
+        { title: "Vectors — operations and representation", duration: "36 min" },
+        { title: "Scalar product and angle between vectors", duration: "42 min" },
+        { title: "Lines and planes in 3D space", duration: "54 min" },
+      ],
+      pdfs: [
+        { title: "Vectors — full notes and formulas", pages: "24 pages" },
+        { title: "Geometry — practice problems set A", pages: "16 pages" },
+        { title: "Geometry — practice problems set B", pages: "16 pages" },
+      ]
+    }
+  }
+];
+
+let currentCourse = null;
+
+// ─── RENDER DASHBOARD ───
+function renderDashboard() {
+  // courses
+  const grid = document.getElementById('courses-grid');
+  grid.innerHTML = COURSES.map(c => `
+    <div class="course-card" onclick="openCourse(${c.id})">
+      <div class="course-thumb" data-num="${c.num}">
+        <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5">
+          <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+        </svg>
+        <div class="course-badge">${c.tag}</div>
+      </div>
+      <div class="course-body">
+        <div class="course-tag">${c.tag}</div>
+        <div class="course-name">${c.name}</div>
+        <div class="course-meta">
+          <span class="course-meta-item">📄 ${c.pdfs} PDFs</span>
+          <span class="course-meta-item">🎬 ${c.videos} videos</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:${c.progress}%"></div>
+        </div>
+      </div>
+    </div>
+  `).join('');
+
+  // recent materials
+  const recents = [
+    { type: 'video', name: 'Derivative rules — power, chain, product', course: 'Calculus I', time: '2 hours ago' },
+    { type: 'pdf', name: 'Baccalaureate past papers — Calculus', course: 'Calculus I', time: 'Yesterday' },
+    { type: 'video', name: 'Solving trig equations', course: 'Trigonometry', time: 'Yesterday' },
+    { type: 'pdf', name: 'Complex numbers — complete notes', course: 'Complex Numbers', time: '3 days ago' },
+    { type: 'video', name: 'Probability laws and conditional probability', course: 'Probability & Statistics', time: '4 days ago' },
+  ];
+  const list = document.getElementById('materials-list');
+  list.innerHTML = recents.map(m => `
+    <div class="material-row" onclick="showToast('Opening: ${m.name}')">
+      <div class="material-icon ${m.type}">
+        ${m.type === 'pdf'
+          ? `<svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>`
+          : `<svg fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M15 10l4.553-2.069A1 1 0 0121 8.87v6.26a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z"/></svg>`
+        }
+      </div>
+      <div class="material-info">
+        <div class="material-name">${m.name}</div>
+        <div class="material-sub">${m.course} · ${m.time}</div>
+      </div>
+      <span class="material-tag ${m.type}">${m.type.toUpperCase()}</span>
+      <span class="material-arrow">›</span>
+    </div>
+  `).join('');
+
+  // admin courses table
+  const tbl = document.getElementById('admin-courses-table');
+  if (tbl) {
+    tbl.innerHTML = `
+      <table style="width:100%;border-collapse:collapse;font-size:14px">
+        <thead>
+          <tr style="border-bottom:1.5px solid var(--gray-200)">
+            <th style="text-align:left;padding:10px 12px;color:var(--gray-500);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:0.5px">Course</th>
+            <th style="text-align:center;padding:10px 12px;color:var(--gray-500);font-weight:600;font-size:12px;text-transform:uppercase">PDFs</th>
+            <th style="text-align:center;padding:10px 12px;color:var(--gray-500);font-weight:600;font-size:12px;text-transform:uppercase">Videos</th>
+            <th style="text-align:center;padding:10px 12px;color:var(--gray-500);font-weight:600;font-size:12px;text-transform:uppercase">Avg progress</th>
+            <th style="text-align:right;padding:10px 12px;color:var(--gray-500);font-weight:600;font-size:12px;text-transform:uppercase">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${COURSES.map(c => `
+          <tr style="border-bottom:1px solid var(--gray-200)">
+            <td style="padding:12px;font-weight:500">${c.name}</td>
+            <td style="padding:12px;text-align:center;color:var(--gray-700)">${c.pdfs}</td>
+            <td style="padding:12px;text-align:center;color:var(--gray-700)">${c.videos}</td>
+            <td style="padding:12px;text-align:center">
+              <span style="background:var(--red-light);color:var(--red);padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600">${c.progress}%</span>
+            </td>
+            <td style="padding:12px;text-align:right">
+              <button onclick="showToast('Editing ${c.name}')" style="background:none;border:1.5px solid var(--gray-200);border-radius:7px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--font-body);color:var(--gray-700);margin-right:6px;transition:all 0.2s" onmouseover="this.style.borderColor='var(--red)';this.style.color='var(--red)'" onmouseout="this.style.borderColor='var(--gray-200)';this.style.color='var(--gray-700)'">Edit</button>
+              <button onclick="showToast('Manage students for ${c.name}')" style="background:var(--red);border:none;border-radius:7px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:var(--font-body);color:white;transition:all 0.2s">Manage</button>
+            </td>
+          </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `;
+  }
+}
+
+// ─── OPEN COURSE ───
+function openCourse(id) {
+  currentCourse = COURSES.find(c => c.id === id);
+  if (!currentCourse) return;
+
+  document.getElementById('hero-tag').textContent = currentCourse.tag;
+  document.getElementById('hero-title').textContent = currentCourse.name;
+  document.getElementById('hero-pdfs').textContent = currentCourse.pdfs + ' PDFs';
+  document.getElementById('hero-videos').textContent = currentCourse.videos + ' Videos';
+  document.getElementById('hero-updated').textContent = 'Updated this week';
+  document.getElementById('ov-title').textContent = currentCourse.name;
+  document.getElementById('ov-desc').textContent = currentCourse.desc;
+
+  // videos
+  const vlist = document.getElementById('video-list');
+  vlist.innerHTML = `<p class="detail-section-title">Video Lessons (${currentCourse.materials.videos.length})</p>` +
+    currentCourse.materials.videos.map((v, i) => `
+      <div class="material-row" onclick="showToast('Playing: ${v.title}')" style="margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:var(--red);display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer">
+          <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><polygon points="5,3 19,12 5,21"/></svg>
+        </div>
+        <div class="material-info">
+          <div class="material-name">Lesson ${i+1} — ${v.title}</div>
+          <div class="material-sub">Duration: ${v.duration}</div>
+        </div>
+        <span class="material-tag video" style="background:#FFE5E5;color:#A01515">VIDEO</span>
+        <span class="material-arrow">›</span>
+      </div>
+    `).join('');
+
+  // pdfs
+  const plist = document.getElementById('pdf-list');
+  plist.innerHTML = `<p class="detail-section-title">PDF Resources (${currentCourse.materials.pdfs.length})</p>` +
+    currentCourse.materials.pdfs.map((p, i) => `
+      <div class="material-row" onclick="showToast('Opening PDF: ${p.title}')" style="margin-bottom:8px">
+        <div style="width:44px;height:44px;border-radius:10px;background:#FFF0F0;display:flex;align-items:center;justify-content:center;flex-shrink:0">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        </div>
+        <div class="material-info">
+          <div class="material-name">${p.title}</div>
+          <div class="material-sub">${p.pages}</div>
+        </div>
+        <span class="material-tag pdf">PDF</span>
+        <span class="material-arrow">›</span>
+      </div>
+    `).join('');
+
+  // reset tabs
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelector('.tab-btn').classList.add('active');
+  document.getElementById('tab-videos').classList.add('active');
+
+  showPage('page-course');
+}
+
+// ─── TAB SWITCH ───
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['videos','pdfs','overview'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+// ─── AUTH ───
+function doLogin() {
+  const email = document.getElementById('login-email').value;
+  if (email.includes('admin')) {
+    showPage('page-admin');
+    renderDashboard();
+  } else {
+    showPage('page-dashboard');
+    renderDashboard();
+  }
+}
+function doLogout() {
+  showPage('page-login');
+}
+function showDash() {
+  showPage('page-dashboard');
+}
+
+// ─── PAGE SWITCH ───
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+// ─── TOAST ───
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// Login on Enter
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('page-login').classList.contains('active')) doLogin();
+});
+</script>
+</body>
+</html>
