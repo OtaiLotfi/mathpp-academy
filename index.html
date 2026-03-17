@@ -81,6 +81,26 @@
     padding: 3px 10px; border-radius: 20px; flex-shrink: 0;
   }
 
+  /* ─── RECENTLY VISITED ─── */
+  .recent-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 200px;
+    max-width: 280px;
+  }
+  .recent-card:hover {
+    border-color: var(--red);
+    box-shadow: 0 2px 12px rgba(204,28,28,0.1);
+  }
+
   /* ─── CATEGORY CARDS ─── */
   .cat-card {
     background: var(--white);
@@ -527,6 +547,26 @@
     font-size: 11px; font-weight: 700;
     background: var(--red-light); color: var(--red);
     padding: 3px 10px; border-radius: 20px; flex-shrink: 0;
+  }
+
+  /* ─── RECENTLY VISITED ─── */
+  .recent-card {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex: 1;
+    min-width: 200px;
+    max-width: 280px;
+  }
+  .recent-card:hover {
+    border-color: var(--red);
+    box-shadow: 0 2px 12px rgba(204,28,28,0.1);
   }
 
   /* ─── CATEGORY CARDS ─── */
@@ -2151,6 +2191,16 @@
         </div>
       </div>
 
+      <!-- MOTIVATIONAL BANNER -->
+      <div id="motivation-banner" style="background:linear-gradient(135deg,#1A1010,#7A0F0F);border-radius:16px;padding:1.5rem 2rem;margin-bottom:2rem;display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden">
+        <div style="position:absolute;right:-10px;bottom:-20px;font-family:var(--font-display);font-size:100px;font-weight:900;color:rgba(255,255,255,0.04);pointer-events:none">∑</div>
+        <div>
+          <div style="font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px">Tip of the day</div>
+          <div id="tip-text" style="font-family:var(--font-display);font-size:17px;font-weight:700;color:white;max-width:600px;line-height:1.4"></div>
+        </div>
+        <button onclick="nextTip()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:8px 16px;color:white;font-size:12px;font-weight:600;cursor:pointer;font-family:var(--font-body);white-space:nowrap;transition:all 0.2s;flex-shrink:0;margin-left:1.5rem" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">Next tip →</button>
+      </div>
+
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:0.5rem">
 
         <div class="cat-card" onclick="openCategory('Analysis')">
@@ -2161,6 +2211,11 @@
           <div class="cat-card-body">
             <div class="cat-card-name">Analysis</div>
             <div class="cat-card-meta">9 chapters</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-bottom:10px;line-height:1.5">Limits, derivatives, integrals, logarithms, exponentials and real sequences.</div>
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:5px"><span>Progress</span><span id="prog-analysis">0%</span></div>
+              <div style="height:5px;background:var(--gray-200);border-radius:5px"><div id="bar-analysis" style="height:100%;width:0%;background:var(--red);border-radius:5px;transition:width 0.6s"></div></div>
+            </div>
             <div class="cat-card-arrow">Explore →</div>
           </div>
         </div>
@@ -2173,6 +2228,11 @@
           <div class="cat-card-body">
             <div class="cat-card-name">Algebra</div>
             <div class="cat-card-meta">4 chapters</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-bottom:10px;line-height:1.5">Complex numbers, polynomial equations, lines, planes and vector products in space.</div>
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:5px"><span>Progress</span><span id="prog-algebra">0%</span></div>
+              <div style="height:5px;background:var(--gray-200);border-radius:5px"><div id="bar-algebra" style="height:100%;width:0%;background:var(--red);border-radius:5px;transition:width 0.6s"></div></div>
+            </div>
             <div class="cat-card-arrow">Explore →</div>
           </div>
         </div>
@@ -2185,10 +2245,26 @@
           <div class="cat-card-body">
             <div class="cat-card-name">Probability & Statistics</div>
             <div class="cat-card-meta">3 chapters</div>
+            <div style="font-size:12px;color:var(--gray-500);margin-bottom:10px;line-height:1.5">Probability on finite sets, random variables and descriptive statistics.</div>
+            <div style="margin-bottom:12px">
+              <div style="display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--gray-500);margin-bottom:5px"><span>Progress</span><span id="prog-probability">0%</span></div>
+              <div style="height:5px;background:var(--gray-200);border-radius:5px"><div id="bar-probability" style="height:100%;width:0%;background:var(--red);border-radius:5px;transition:width 0.6s"></div></div>
+            </div>
             <div class="cat-card-arrow">Explore →</div>
           </div>
         </div>
 
+      </div>
+
+      <!-- QUICK ACCESS -->
+      <div id="quick-access-section" style="display:none;margin-top:2.5rem">
+        <div class="section-header" style="margin-bottom:1rem">
+          <div class="section-title-line">
+            <div class="title-accent"></div>
+            <h2 class="section-title">Recently Visited</h2>
+          </div>
+        </div>
+        <div id="quick-access-list" style="display:flex;gap:1rem;flex-wrap:wrap"></div>
       </div>
     </div>
 
@@ -2807,6 +2883,9 @@ function renderDashboard() {
   document.getElementById('cat-view').style.display = 'block';
   document.getElementById('chapters-view').style.display = 'none';
   document.getElementById('filtered-view').style.display = 'none';
+  showTip();
+  setTimeout(updateCategoryProgress, 100);
+  renderRecentlyVisited();
 }
 
 function openCategory(cat) {
@@ -2820,33 +2899,53 @@ function openCategory(cat) {
   document.getElementById('chapters-view').style.display = 'block';
   document.getElementById('cat-title').textContent = cat === 'Probability' ? 'Probability & Statistics' : cat;
 
-  const grid = document.getElementById('courses-grid');
-  const chapters = COURSES.filter(c => c.category === cat);
-  let html = '<div class="courses-grid" style="grid-template-columns:repeat(2,1fr)">';
-  chapters.forEach(c => {
-    html += `<div class="course-card" onclick="openCourse(${c.id})">
-      <div class="course-thumb" data-num="${c.num}" style="background:linear-gradient(135deg, var(--red-deep), var(--red))">
-        <svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5">
-          <path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-        </svg>
-        <div class="course-badge">Ch. ${c.num}</div>
-      </div>
-      <div class="course-body">
-        <div class="course-tag" style="background:var(--red-light);color:var(--red)">${c.tag}</div>
-        <div class="course-name">${c.name}</div>
-        <div class="course-meta">
-          <span class="course-meta-item">📄 ${c.pdfs} PDF${c.pdfs!==1?'s':''}</span>
-          <span class="course-meta-item">🎬 ${c.videos} video${c.videos!==1?'s':''}</span>
-        </div>
-        <div class="progress-bar-wrap">
-          <div class="progress-bar-fill" style="width:${c.progress}%"></div>
-        </div>
-      </div>
-    </div>`;
+  var grid = document.getElementById('courses-grid');
+  var chapters = COURSES.filter(function(c) { return c.category === cat; });
+
+  // Category descriptions
+  var catDescs = {
+    'Analysis': 'Limits, derivatives, integrals, logarithms, exponentials and real sequences — the foundations of calculus.',
+    'Algebra': 'Complex numbers, polynomial equations, lines, planes and vector products in space.',
+    'Probability': 'Probability on finite sets, random variables and descriptive statistics.'
+  };
+
+  // Overall category progress
+  var totalProg = chapters.reduce(function(s,c){ return s + c.progress; }, 0);
+  var avgProg = chapters.length ? Math.round(totalProg / chapters.length) : 0;
+
+  var catHeader = '<div style="background:white;border:1.5px solid var(--gray-200);border-radius:14px;padding:1.25rem 1.5rem;margin-bottom:1.75rem">' +
+    '<p style="font-size:14px;color:var(--gray-700);line-height:1.7;margin-bottom:1rem">' + (catDescs[cat] || '') + '</p>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--gray-500);margin-bottom:6px">' +
+      '<span>Overall progress — ' + chapters.length + ' chapters</span>' +
+      '<span style="color:var(--red)">' + avgProg + '%</span>' +
+    '</div>' +
+    '<div style="height:6px;background:var(--gray-200);border-radius:6px;overflow:hidden">' +
+      '<div style="height:100%;width:' + avgProg + '%;background:linear-gradient(90deg,#7A0F0F,#CC1C1C);border-radius:6px;transition:width 0.8s"></div>' +
+    '</div>' +
+  '</div>';
+
+  var rows = '';
+  chapters.forEach(function(c) {
+    rows += '<div class="course-card" onclick="openCourse(' + c.id + ')">' +
+      '<div class="course-thumb" data-num="' + c.num + '" style="background:linear-gradient(135deg,var(--red-deep),var(--red))">' +
+        '<svg fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="1.5" style="width:36px;height:36px"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>' +
+        '<div class="course-badge">Ch. ' + c.num + '</div>' +
+      '</div>' +
+      '<div class="course-body">' +
+        '<div class="course-tag" style="background:var(--red-light);color:var(--red)">' + c.tag + '</div>' +
+        '<div class="course-name">' + c.name + '</div>' +
+        '<div class="course-meta">' +
+          '<span class="course-meta-item">📄 ' + c.pdfs + ' PDF' + (c.pdfs!==1?'s':'') + '</span>' +
+          '<span class="course-meta-item">🎬 ' + c.videos + ' video' + (c.videos!==1?'s':'') + '</span>' +
+        '</div>' +
+        '<div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:' + c.progress + '%"></div></div>' +
+      '</div>' +
+    '</div>';
   });
-  html += '</div>';
-  grid.innerHTML = html;
+
+  grid.innerHTML = catHeader + '<div class="courses-grid" style="grid-template-columns:repeat(3,1fr)">' + rows + '</div>';
 }
+
 
 function renderAdminTable() {
   const tbl = document.getElementById('admin-courses-table');
@@ -2903,6 +3002,7 @@ var courseNavSource = 'category'; // 'category', 'filtered', 'search'
 function openCourse(id) {
   currentCourse = COURSES.find(c => c.id === id);
   if (!currentCourse) return;
+  addToRecent(id);
 
   document.getElementById('hero-tag').textContent = currentCourse.tag;
   document.getElementById('hero-title').textContent = currentCourse.name;
@@ -3766,6 +3866,73 @@ document.addEventListener('mousedown', function(e) {
     box.style.display = 'none';
   }
 });
+
+
+// ─── TIPS ───
+var tips = [
+  "A function is continuous if you can draw it without lifting your pencil.",
+  "The derivative measures the instantaneous rate of change at a point.",
+  "∫f(x)dx is the area under the curve — the reverse of differentiation.",
+  "In complex numbers, i² = -1. Every quadratic has a solution in ℂ.",
+  "The modulus |z| of a complex number is its distance from the origin.",
+  "P(A∩B) = P(A) × P(B) only when A and B are independent events.",
+  "ln(ab) = ln(a) + ln(b) — logarithms turn products into sums.",
+  "A sequence converges if its terms get arbitrarily close to a limit L.",
+  "The scalar product of two perpendicular vectors is always zero.",
+  "De Moivre's theorem: (cosθ + i·sinθ)ⁿ = cos(nθ) + i·sin(nθ)."
+];
+var tipIndex = 0;
+function showTip() {
+  var el = document.getElementById('tip-text');
+  if (el) el.textContent = '"' + tips[tipIndex] + '"';
+}
+function nextTip() {
+  tipIndex = (tipIndex + 1) % tips.length;
+  showTip();
+}
+
+// ─── CATEGORY PROGRESS BARS ───
+function updateCategoryProgress() {
+  var cats = { 'Analysis': [], 'Algebra': [], 'Probability': [] };
+  COURSES.forEach(function(c) { if (cats[c.category]) cats[c.category].push(c.progress); });
+  Object.keys(cats).forEach(function(cat) {
+    var arr = cats[cat];
+    var avg = arr.length ? Math.round(arr.reduce(function(a,b){return a+b;},0) / arr.length) : 0;
+    var key = cat.toLowerCase();
+    var bar = document.getElementById('bar-' + key);
+    var txt = document.getElementById('prog-' + key);
+    if (bar) bar.style.width = avg + '%';
+    if (txt) txt.textContent = avg + '%';
+  });
+}
+
+// ─── RECENTLY VISITED ───
+var recentlyVisited = [];
+function addToRecent(courseId) {
+  recentlyVisited = recentlyVisited.filter(function(id){ return id !== courseId; });
+  recentlyVisited.unshift(courseId);
+  if (recentlyVisited.length > 4) recentlyVisited = recentlyVisited.slice(0,4);
+  renderRecentlyVisited();
+}
+function renderRecentlyVisited() {
+  var section = document.getElementById('quick-access-section');
+  var list    = document.getElementById('quick-access-list');
+  if (!section || !list || recentlyVisited.length === 0) return;
+  section.style.display = 'block';
+  list.innerHTML = recentlyVisited.map(function(id) {
+    var c = COURSES.find(function(x){ return x.id === id; });
+    if (!c) return '';
+    return '<div onclick="openCourse(' + c.id + ')" class="recent-card">' +
+      '<div style="width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--red-deep),var(--red));display:flex;align-items:center;justify-content:center;flex-shrink:0">' +
+        '<svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="white" stroke-width="2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13"/></svg>' +
+      '</div>' +
+      '<div style="min-width:0">' +
+        '<div style="font-size:13px;font-weight:600;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + c.name + '</div>' +
+        '<div style="font-size:11px;color:var(--gray-500)">' + c.category + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
 
 // Login on Enter
 document.addEventListener('keydown', e => {
