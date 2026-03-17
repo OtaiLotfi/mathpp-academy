@@ -2010,9 +2010,298 @@
     border-radius: 4px; transition: width 0.4s ease;
   }
 
+  /* ─── SIDEBAR DRAWER ─── */
+  #sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,16,16,0.08);
+    z-index: 999;
+    transition: opacity 0.3s;
+    opacity: 0;
+  }
+  #sidebar-overlay.open { display: block; opacity: 1; }
+
+  #sidebar-drawer {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: 300px;
+    background: var(--white);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(-100%);
+    transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 4px 0 32px rgba(26,16,16,0.18);
+  }
+  #sidebar-drawer.open { transform: translateX(0); }
+
+  /* Sidebar header */
+  .sb-header {
+    background: linear-gradient(135deg, #1A1010 0%, #7A0F0F 60%, #CC1C1C 100%);
+    padding: 1.6rem 1.4rem 1.4rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: relative;
+  }
+  .sb-close-btn {
+    position: absolute;
+    top: 12px; right: 12px;
+    background: rgba(255,255,255,0.12);
+    border: none;
+    color: white;
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 18px;
+    line-height: 1;
+  }
+  .sb-close-btn:hover { background: rgba(255,255,255,0.22); }
+  .sb-user-avatar {
+    width: 46px; height: 46px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display);
+    font-size: 18px; font-weight: 700;
+    color: white;
+    flex-shrink: 0;
+  }
+  .sb-user-info { flex: 1; min-width: 0; }
+  .sb-user-name {
+    font-family: var(--font-display);
+    font-size: 15px; font-weight: 700;
+    color: white;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .sb-user-role {
+    font-size: 11px; color: rgba(255,255,255,0.65);
+    font-weight: 500; margin-top: 2px;
+  }
+
+  /* Sidebar body */
+  .sb-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 0.75rem 0;
+  }
+  .sb-section-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    padding: 12px 20px 6px;
+  }
+  .sb-item {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    padding: 11px 20px;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+    text-decoration: none;
+  }
+  .sb-item:hover { background: var(--red-light); border-left-color: var(--red-mid); }
+  .sb-item.active { background: var(--red-light); border-left-color: var(--red); }
+  .sb-item-icon {
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+  .sb-item:hover .sb-item-icon,
+  .sb-item.active .sb-item-icon { background: rgba(204,28,28,0.12); }
+  .sb-item-icon svg { width: 17px; height: 17px; color: var(--gray-700); }
+  .sb-item:hover .sb-item-icon svg,
+  .sb-item.active .sb-item-icon svg { color: var(--red); }
+  .sb-item-label {
+    font-size: 14px; font-weight: 600;
+    color: var(--gray-700);
+    flex: 1;
+  }
+  .sb-item:hover .sb-item-label,
+  .sb-item.active .sb-item-label { color: var(--red); }
+  .sb-item-badge {
+    font-size: 11px; font-weight: 700;
+    background: var(--red); color: white;
+    padding: 2px 8px; border-radius: 20px;
+  }
+  .sb-divider {
+    height: 1px;
+    background: var(--gray-200);
+    margin: 8px 20px;
+  }
+
+  /* Sidebar footer */
+  .sb-footer {
+    padding: 1rem 1.2rem;
+    border-top: 1.5px solid var(--gray-200);
+  }
+  .sb-logout-btn {
+    width: 100%;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 10px 16px;
+    background: none;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 14px; font-weight: 600;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .sb-logout-btn:hover { border-color: var(--red); color: var(--red); background: var(--red-light); }
+  .sb-logout-btn svg { width: 16px; height: 16px; }
+
+  /* Hamburger button — inside nav, left of logo */
+  #sidebar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  #sidebar-toggle-btn:hover { background: var(--red-light); border-color: var(--red); }
+  #sidebar-toggle-btn svg { width: 18px; height: 18px; color: var(--gray-700); }
+  #sidebar-toggle-btn:hover svg { color: var(--red); }
+
 </style>
 </head>
 <body>
+
+<!-- ─── SIDEBAR OVERLAY ─── -->
+<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+<!-- ─── SIDEBAR DRAWER ─── -->
+<div id="sidebar-drawer">
+
+  <!-- Header -->
+  <div class="sb-header">
+    <button class="sb-close-btn" onclick="closeSidebar()" title="Close">✕</button>
+    <div class="sb-user-avatar" id="sb-avatar">LO</div>
+    <div class="sb-user-info">
+      <div class="sb-user-name" id="sb-name">Lotfi OTAI</div>
+      <div class="sb-user-role">Baccalaureate Student</div>
+    </div>
+  </div>
+
+  <!-- Body -->
+  <div class="sb-body">
+
+    <div class="sb-section-label">Navigation</div>
+
+    <div class="sb-item active" onclick="closeSidebar();showDash()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+      </div>
+      <span class="sb-item-label">Dashboard</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar();showDash()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      </div>
+      <span class="sb-item-label">Categories</span>
+    </div>
+
+    <div class="sb-section-label">Subjects</div>
+
+    <div class="sb-item" onclick="closeSidebar();openCategory('Analysis')">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M7 21h10M12 21V3m0 0L8 7m4-4l4 4"/></svg>
+      </div>
+      <span class="sb-item-label">Analysis</span>
+      <span class="sb-item-badge">9</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar();openCategory('Algebra')">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4.871 4A17.926 17.926 0 003 12c0 2.874.673 5.59 1.871 8m14.13-16A17.926 17.926 0 0121 12c0 2.874-.673 5.59-1.871 8M9 9h1.246a1 1 0 01.961.725l1.586 5.55a1 1 0 00.961.725H15"/></svg>
+      </div>
+      <span class="sb-item-label">Algebra</span>
+      <span class="sb-item-badge">4</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar();openCategory('Probability')">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+      </div>
+      <span class="sb-item-label">Probability & Stats</span>
+      <span class="sb-item-badge">3</span>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section-label">My Learning</div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <span class="sb-item-label">My Progress</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      </div>
+      <span class="sb-item-label">Bookmarks</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <span class="sb-item-label">Continue Learning</span>
+    </div>
+
+    <div class="sb-divider"></div>
+    <div class="sb-section-label">Account</div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
+      <span class="sb-item-label">Profile</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      </div>
+      <span class="sb-item-label">Settings</span>
+    </div>
+
+    <div class="sb-item" onclick="closeSidebar()">
+      <div class="sb-item-icon">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      </div>
+      <span class="sb-item-label">Help & FAQ</span>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="sb-footer">
+    <button class="sb-logout-btn" onclick="closeSidebar();doLogout()">
+      <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign out
+    </button>
+  </div>
+
+</div>
 
 <!-- TOAST -->
 <div class="toast" id="toast"></div>
@@ -2087,12 +2376,17 @@
 ═══════════════════════════════════════ -->
 <div class="page" id="page-dashboard">
   <nav>
-    <!-- LEFT: Logo + name + tagline -->
-    <div class="nav-logo" onclick="showDash()">
+    <!-- LEFT: Hamburger + Logo -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="sidebar-toggle-btn" onclick="openSidebar()" title="Open menu">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="nav-logo" onclick="showDash()">
       <img src="data:image/jpeg;base64,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" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 10px rgba(204,28,28,0.18)" alt="Math++ Academy">
       <div>
         <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--gray-900);line-height:1.1">Math<sup style="color:#7A0F0F;font-size:0.7em;vertical-align:super;line-height:0;font-weight:900">++</sup> Academy</div>
         <div style="font-size:11px;color:var(--gray-500);font-weight:500;letter-spacing:0.3px;margin-top:2px">Baccalaureate Mathematics</div>
+      </div>
       </div>
     </div>
 
@@ -2300,10 +2594,41 @@
 ═══════════════════════════════════════ -->
 <div class="page" id="page-course">
   <nav>
-    <div class="nav-logo" onclick="showDash()">
-      <img src="data:image/jpeg;base64,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" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 10px rgba(204,28,28,0.18)" alt="Math++ Academy">
-      
+    <!-- LEFT: Hamburger + Logo -->
+    <div style="display:flex;align-items:center;gap:8px;">
+      <button id="sidebar-toggle-btn-course" onclick="openSidebar()" title="Open menu" style="display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:white;border:1.5px solid var(--gray-200);cursor:pointer;flex-shrink:0;transition:all 0.2s;" onmouseover="this.style.background='var(--red-light)';this.style.borderColor='var(--red)'" onmouseout="this.style.background='white';this.style.borderColor='var(--gray-200)'">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2" style="width:18px;height:18px;color:var(--gray-700)"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="nav-logo" onclick="showDash()">
+        <img src="data:image/jpeg;base64,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" style="width:56px;height:56px;border-radius:12px;object-fit:cover;flex-shrink:0;box-shadow:0 2px 10px rgba(204,28,28,0.18)" alt="Math++ Academy">
+        <div>
+          <div style="font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--gray-900);line-height:1.1">Math<sup style="color:#7A0F0F;font-size:0.7em;vertical-align:super;line-height:0;font-weight:900">++</sup> Academy</div>
+          <div style="font-size:11px;color:var(--gray-500);font-weight:500;letter-spacing:0.3px;margin-top:2px">Baccalaureate Mathematics</div>
+        </div>
+      </div>
     </div>
+    <!-- CENTER: Nav links -->
+    <div class="nav-center">
+      <button class="nav-link" onclick="showDash()">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+        Dashboard
+      </button>
+      <span class="nav-sep">›</span>
+      <button class="nav-link" onclick="showDash()">Categories</button>
+      <span class="nav-breadcrumb" id="nav-breadcrumb-course" style="display:none">
+        <span class="nav-sep">›</span>
+        <span id="nav-breadcrumb-text-course" style="font-size:13px;font-weight:600;color:var(--red)"></span>
+      </span>
+      <!-- Compact search -->
+      <div class="nav-search-wrap">
+        <svg style="position:absolute;left:10px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--gray-500);pointer-events:none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" placeholder="Search chapter…"
+          style="width:100%;padding:7px 10px 7px 30px;border:1.5px solid var(--gray-200);border-radius:20px;font-family:var(--font-body);font-size:13px;color:var(--gray-900);background:white;outline:none;transition:all 0.2s"
+          onfocusin="this.style.borderColor='var(--red)'"
+          onfocusout="this.style.borderColor='var(--gray-200)'">
+      </div>
+    </div>
+    <!-- RIGHT: User + sign out -->
     <div class="nav-right">
       <div class="nav-user">
         <div class="avatar">LO</div>
@@ -3933,6 +4258,27 @@ function renderRecentlyVisited() {
     '</div>';
   }).join('');
 }
+
+// ─── SIDEBAR ───
+function openSidebar() {
+  document.getElementById('sidebar-drawer').classList.add('open');
+  document.getElementById('sidebar-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  // Sync user info
+  var nameEl = document.getElementById('nav-name');
+  var avatarEl = document.getElementById('nav-avatar');
+  if (nameEl) document.getElementById('sb-name').textContent = nameEl.textContent;
+  if (avatarEl) document.getElementById('sb-avatar').textContent = avatarEl.textContent;
+}
+function closeSidebar() {
+  document.getElementById('sidebar-drawer').classList.remove('open');
+  document.getElementById('sidebar-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+// Close with Escape key
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') closeSidebar();
+});
 
 // Login on Enter
 document.addEventListener('keydown', e => {
