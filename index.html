@@ -2178,6 +2178,130 @@
   #sidebar-toggle-btn svg { width: 18px; height: 18px; color: var(--gray-700); }
   #sidebar-toggle-btn:hover svg { color: var(--red); }
 
+  /* ─── CUSTOM DROPDOWN (CDD) ─── */
+  .cdd { position: relative; }
+  .cdd-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px 10px 10px;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 10px;
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--gray-900);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: left;
+    box-sizing: border-box;
+    min-height: 44px;
+  }
+  .cdd-trigger:hover { border-color: var(--red-mid); box-shadow: 0 0 0 3px rgba(204,28,28,0.06); }
+  .cdd.open .cdd-trigger { border-color: var(--red); box-shadow: 0 0 0 3px rgba(204,28,28,0.09); }
+  .cdd-trigger-icon {
+    width: 26px; height: 26px;
+    border-radius: 7px;
+    background: var(--red-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+  }
+  .cdd.open .cdd-trigger-icon, .cdd-trigger:hover .cdd-trigger-icon { background: rgba(204,28,28,0.14); }
+  .cdd-trigger-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 500;
+    color: var(--gray-900);
+  }
+  .cdd-trigger-label.placeholder { color: var(--gray-500); font-weight: 400; }
+  .cdd-chevron { flex-shrink: 0; transition: transform 0.25s; color: var(--gray-500); }
+  .cdd.open .cdd-chevron { transform: rotate(180deg); color: var(--red); }
+  .cdd-panel {
+    display: none;
+    position: absolute;
+    top: calc(100% + 7px);
+    left: 0; right: 0;
+    background: white;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 12px;
+    box-shadow: 0 10px 36px rgba(0,0,0,0.13);
+    z-index: 600;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+  .cdd.open .cdd-panel { display: block; animation: cddFadeIn 0.18s ease; }
+  @keyframes cddFadeIn {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .cdd-group-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px 5px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+    color: var(--gray-500);
+    background: var(--gray-100);
+    border-top: 1px solid var(--gray-200);
+    user-select: none;
+  }
+  .cdd-group-label:first-child { border-top: none; }
+  .cdd-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    transition: background 0.13s;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-900);
+    border-bottom: 1px solid var(--gray-100);
+  }
+  .cdd-option:last-child { border-bottom: none; }
+  .cdd-option:hover { background: var(--red-light); }
+  .cdd-option.cdd-selected { background: #FFF0F0; color: var(--red); }
+  .cdd-option-num {
+    width: 24px; height: 24px;
+    border-radius: 7px;
+    background: var(--gray-100);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 700;
+    color: var(--gray-700);
+    flex-shrink: 0;
+    transition: all 0.15s;
+    font-family: var(--font-display);
+  }
+  .cdd-option.cdd-selected .cdd-option-num { background: var(--red); color: white; }
+  .cdd-opt-icon {
+    width: 30px; height: 30px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.15s;
+  }
+  .cdd-opt-desc {
+    font-size: 11px;
+    color: var(--gray-500);
+    font-weight: 400;
+    margin-top: 1px;
+  }
+  .cdd-option.cdd-selected .cdd-opt-desc { color: rgba(204,28,28,0.7); }
+  .cdd-check {
+    margin-left: auto;
+    color: var(--red);
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+
 </style>
 </head>
 <body>
@@ -2869,21 +2993,71 @@
 
       <!-- Row: Chapter | Section | Type -->
       <div style="display:grid;grid-template-columns:1fr 1fr auto;gap:1.25rem;align-items:end;margin-bottom:1.5rem">
+
+        <!-- ── CHAPTER custom dropdown ── -->
         <div>
           <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px">Chapter</label>
-          <select id="new-upload-chapter" onchange="onAdminChapterChange()" style="width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-family:var(--font-body);font-size:14px;color:var(--gray-900);background:white;outline:none;cursor:pointer;transition:border-color 0.2s" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--gray-200)'">
+          <!-- Hidden native select kept for JS compatibility -->
+          <select id="new-upload-chapter" style="display:none" onchange="onAdminChapterChange()">
             <option value="">— Select chapter —</option>
           </select>
+          <!-- Custom dropdown UI -->
+          <div class="cdd" id="cdd-chapter">
+            <button type="button" class="cdd-trigger" id="cdd-chapter-trigger" onclick="cddToggle('chapter')">
+              <span class="cdd-trigger-icon" id="cdd-chapter-icon">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2.2"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              </span>
+              <span class="cdd-trigger-label placeholder" id="cdd-chapter-label">— Select chapter —</span>
+              <svg class="cdd-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+            </button>
+            <div class="cdd-panel" id="cdd-chapter-panel">
+              <!-- Built by buildChapterCDD() -->
+            </div>
+          </div>
         </div>
+
+        <!-- ── SECTION custom dropdown ── -->
         <div>
           <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px">Section</label>
-          <select id="new-upload-section" style="width:100%;padding:11px 14px;border:1.5px solid var(--gray-200);border-radius:10px;font-family:var(--font-body);font-size:14px;color:var(--gray-900);background:white;outline:none;cursor:pointer;transition:border-color 0.2s" onfocus="this.style.borderColor='var(--red)'" onblur="this.style.borderColor='var(--gray-200)'">
+          <!-- Hidden native select kept for JS compatibility -->
+          <select id="new-upload-section" style="display:none">
             <option value="courses">Courses</option>
             <option value="exerciseSet">Exercise Set</option>
             <option value="exams">Exams</option>
             <option value="competitionExams">Competition Exams</option>
           </select>
+          <!-- Custom dropdown UI -->
+          <div class="cdd" id="cdd-section">
+            <button type="button" class="cdd-trigger" id="cdd-section-trigger" onclick="cddToggle('section')">
+              <span class="cdd-trigger-icon" id="cdd-section-icon" style="background:#FFF0F0">
+                <svg width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2.2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              </span>
+              <span class="cdd-trigger-label" id="cdd-section-label">Courses</span>
+              <svg class="cdd-chevron" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><polyline points="6,9 12,15 18,9"/></svg>
+            </button>
+            <div class="cdd-panel" id="cdd-section-panel">
+              <div class="cdd-option cdd-selected" data-val="courses" onclick="cddSelectSection('courses','Courses','<svg width=&quot;13&quot; height=&quot;13&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;#CC1C1C&quot; stroke-width=&quot;2.2&quot;><path d=&quot;M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z&quot;/></svg>','#FFF0F0')">
+                <span class="cdd-opt-icon" style="background:#FFF0F0"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
+                <div><div>Courses</div><div class="cdd-opt-desc">Main lesson material</div></div>
+                <span class="cdd-check">✓</span>
+              </div>
+              <div class="cdd-option" data-val="exerciseSet" onclick="cddSelectSection('exerciseSet','Exercise Set','<svg width=&quot;13&quot; height=&quot;13&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;#CC1C1C&quot; stroke-width=&quot;2.2&quot;><path d=&quot;M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z&quot;/></svg>','#FFF0F0')">
+                <span class="cdd-opt-icon" style="background:#FFF0F0"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg></span>
+                <div><div>Exercise Set</div><div class="cdd-opt-desc">Practice problems</div></div>
+              </div>
+              <div class="cdd-option" data-val="exams" onclick="cddSelectSection('exams','Exams','<svg width=&quot;13&quot; height=&quot;13&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;#CC1C1C&quot; stroke-width=&quot;2.2&quot;><path d=&quot;M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4&quot;/></svg>','#FFF0F0')">
+                <span class="cdd-opt-icon" style="background:#FFF0F0"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg></span>
+                <div><div>Exams</div><div class="cdd-opt-desc">Past exam papers</div></div>
+              </div>
+              <div class="cdd-option" data-val="competitionExams" onclick="cddSelectSection('competitionExams','Competition Exams','<svg width=&quot;13&quot; height=&quot;13&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; stroke=&quot;#CC1C1C&quot; stroke-width=&quot;2.2&quot;><path d=&quot;M5 3l14 9-14 9V3z&quot;/></svg>','#FFF0F0')">
+                <span class="cdd-opt-icon" style="background:#FFF0F0"><svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="#CC1C1C" stroke-width="2"><polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26 12,2"/></svg></span>
+                <div><div>Competition Exams</div><div class="cdd-opt-desc">Olympiad-level content</div></div>
+              </div>
+            </div>
+          </div>
         </div>
+
+        <!-- ── TYPE toggle (unchanged) ── -->
         <div>
           <label style="display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gray-500);margin-bottom:8px">Type</label>
           <div style="display:flex;border:1.5px solid var(--gray-200);border-radius:10px;overflow:hidden">
@@ -2989,7 +3163,7 @@
       <div style="width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,0.12);border:3px solid rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:28px;font-weight:700;color:white;flex-shrink:0">AD</div>
       <div style="z-index:1">
         <div style="font-family:var(--font-display);font-size:24px;font-weight:700;color:white;margin-bottom:4px">Math++ Admin</div>
-        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:12px">Owner &amp; Content Manager · admin@mathpp.academy</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.55);margin-bottom:12px">Owner &amp; Content Manager · <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5e3f3a3337301e333f2a362e2e703f3d3f3a3b3327">[email&#160;protected]</a></div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
           <span style="background:rgba(204,28,28,0.35);color:white;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;border:1px solid rgba(204,28,28,0.5)">Owner</span>
           <span style="background:rgba(255,255,255,0.1);color:white;font-size:11px;font-weight:600;padding:4px 12px;border-radius:20px">Full Access</span>
@@ -3287,7 +3461,7 @@
   </div>
 </div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ─── DATA ───
 const COURSES = [
   // ── ANALYSE ──
@@ -3983,7 +4157,7 @@ function initAdminPanel() {
   if (ep) ep.textContent = totP;
   if (ev) ev.textContent = totV;
 
-  // Populate chapter dropdown
+  // Populate hidden chapter select (for JS compat)
   var sel = document.getElementById('new-upload-chapter');
   if (sel) {
     sel.innerHTML = '<option value="">— Select chapter —</option>';
@@ -3994,6 +4168,8 @@ function initAdminPanel() {
       sel.appendChild(opt);
     });
   }
+  // Build custom chapter dropdown
+  buildChapterCDD();
 
   // Render chapters table
   renderAdminChaptersTable();
@@ -4049,6 +4225,22 @@ function adminQuickUpload(chapterId) {
   if (!_adminUploadOpen) toggleAdminUploadPanel();
   var sel = document.getElementById('new-upload-chapter');
   if (sel) { sel.value = chapterId; onAdminChapterChange(); }
+  // Also sync the custom dropdown display
+  var c = COURSES.find(function(x){ return x.id === chapterId; });
+  if (c) {
+    var lbl = document.getElementById('cdd-chapter-label');
+    var ico = document.getElementById('cdd-chapter-icon');
+    if (lbl) { lbl.textContent = 'Ch. ' + c.num + ' — ' + c.name; lbl.classList.remove('placeholder'); }
+    if (ico) { ico.innerHTML = '<span style="font-family:var(--font-display);font-size:10px;font-weight:700;color:var(--red);line-height:1">' + c.num + '</span>'; ico.style.background = 'var(--red-light)'; }
+    document.querySelectorAll('#cdd-chapter-panel .cdd-option').forEach(function(opt) {
+      var isSel = opt.getAttribute('data-id') == chapterId;
+      opt.classList.toggle('cdd-selected', isSel);
+      var numEl = opt.querySelector('.cdd-option-num');
+      if (numEl) { numEl.style.background = isSel ? 'var(--red)' : 'var(--gray-100)'; numEl.style.color = isSel ? 'white' : 'var(--gray-700)'; }
+      var chk = opt.querySelector('.cdd-check');
+      if (chk) chk.style.display = isSel ? '' : 'none';
+    });
+  }
   document.getElementById('admin-upload-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
@@ -4704,6 +4896,84 @@ function finishUpload(type, course, title, btn) {
 }
 
 
+// ─── CUSTOM DROPDOWN (CDD) ───
+var _cddOpen = null;
+function cddToggle(name) {
+  if (_cddOpen && _cddOpen !== name) cddClose(_cddOpen);
+  var el = document.getElementById('cdd-' + name);
+  if (!el) return;
+  if (el.classList.contains('open')) { cddClose(name); } else { el.classList.add('open'); _cddOpen = name; }
+}
+function cddClose(name) {
+  var el = document.getElementById('cdd-' + name);
+  if (el) el.classList.remove('open');
+  if (_cddOpen === name) _cddOpen = null;
+}
+document.addEventListener('click', function(e) {
+  if (!_cddOpen) return;
+  var el = document.getElementById('cdd-' + _cddOpen);
+  if (el && !el.contains(e.target)) cddClose(_cddOpen);
+});
+function cddSelectChapter(id, num, name) {
+  var sel = document.getElementById('new-upload-chapter');
+  if (sel) { sel.value = id; onAdminChapterChange(); }
+  var lbl = document.getElementById('cdd-chapter-label');
+  var ico = document.getElementById('cdd-chapter-icon');
+  if (lbl) { lbl.textContent = 'Ch. ' + num + ' — ' + name; lbl.classList.remove('placeholder'); }
+  if (ico) { ico.innerHTML = '<span style="font-family:var(--font-display);font-size:10px;font-weight:700;color:var(--red);line-height:1">' + num + '</span>'; ico.style.background = 'var(--red-light)'; }
+  document.querySelectorAll('#cdd-chapter-panel .cdd-option').forEach(function(opt) {
+    var isSel = opt.getAttribute('data-id') == id;
+    opt.classList.toggle('cdd-selected', isSel);
+    var numEl = opt.querySelector('.cdd-option-num');
+    if (numEl) { numEl.style.background = isSel ? 'var(--red)' : 'var(--gray-100)'; numEl.style.color = isSel ? 'white' : 'var(--gray-700)'; }
+    var chk = opt.querySelector('.cdd-check');
+    if (chk) chk.style.display = isSel ? '' : 'none';
+  });
+  cddClose('chapter');
+}
+function cddSelectSection(val, label, iconSvg, iconBg) {
+  var sel = document.getElementById('new-upload-section');
+  if (sel) sel.value = val;
+  var lbl = document.getElementById('cdd-section-label');
+  var ico = document.getElementById('cdd-section-icon');
+  if (lbl) lbl.textContent = label;
+  if (ico) { ico.innerHTML = iconSvg; ico.style.background = iconBg || 'var(--red-light)'; }
+  document.querySelectorAll('#cdd-section-panel .cdd-option').forEach(function(opt) {
+    var isSel = opt.getAttribute('data-val') === val;
+    opt.classList.toggle('cdd-selected', isSel);
+    var chk = opt.querySelector('.cdd-check');
+    if (chk) chk.style.display = isSel ? '' : 'none';
+  });
+  cddClose('section');
+}
+function buildChapterCDD() {
+  var panel = document.getElementById('cdd-chapter-panel');
+  if (!panel) return;
+  var cats = [
+    { name: 'Analysis',    icon: '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#9E8E8E" stroke-width="2.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>' },
+    { name: 'Algebra',     icon: '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#9E8E8E" stroke-width="2.5"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>' },
+    { name: 'Probability', icon: '<svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="#9E8E8E" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>' }
+  ];
+  var html = '';
+  cats.forEach(function(cat) {
+    var chapters = COURSES.filter(function(c) { return c.category === cat.name; });
+    if (!chapters.length) return;
+    html += '<div class="cdd-group-label">' + cat.icon + '&nbsp;' + cat.name + '</div>';
+    chapters.forEach(function(c) {
+      html += '<div class="cdd-option" data-id="' + c.id + '" onclick="cddSelectChapter(' + c.id + ',\'' + c.num + '\',\'' + c.name.replace(/'/g, "\\'") + '\')">' +
+        '<span class="cdd-option-num">' + c.num + '</span>' +
+        '<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + c.name + '</span>' +
+        '<span class="cdd-check" style="display:none">✓</span>' +
+      '</div>';
+    });
+  });
+  panel.innerHTML = html;
+  // Hide all section check marks except Courses (default)
+  document.querySelectorAll('#cdd-section-panel .cdd-check').forEach(function(el, i) {
+    el.style.display = i === 0 ? '' : 'none';
+  });
+}
+
 // ─── CHAPTER FILTER DROPDOWN ───
 var filterOpen = false;
 var selectedChapterIds = [];
@@ -5063,13 +5333,4 @@ function toggleAdminFaq(i) {
     if (j === i) {
       var isOpen = body.style.display !== 'none';
       body.style.display = isOpen ? 'none' : 'block';
-      icon.textContent   = isOpen ? '+' : '−';
-      card.style.borderColor = isOpen ? 'var(--gray-200)' : 'var(--red)';
-    } else {
-      body.style.display = 'none';
-      icon.textContent   = '+';
-      card.style.borderColor = 'var(--gray-200)';
-    }
-  }
-}
-</script>
+      icon.textContent   = isOpen ? '+' : '�
